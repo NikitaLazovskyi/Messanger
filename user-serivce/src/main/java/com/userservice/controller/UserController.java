@@ -36,6 +36,11 @@ public class UserController implements UserApi {
     }
 
     @Override
+    public UserDto profile() {
+        return userService.profile();
+    }
+
+    @Override
     public ResponseEntity<Void> delete(String userName) {
         return userService.delete(userName);
     }

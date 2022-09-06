@@ -9,6 +9,7 @@ public interface UserService {
     UserDto create(UserDto userDto);
     ResponseEntity<Void> update(UserDto userDto);
     ResponseEntity<Void> login(UserDto userDto);
+    UserDto profile();
     ResponseEntity<Void> logout();
     public ResponseEntity<Void> delete(String username);
     UserDto getByEmail(String email);

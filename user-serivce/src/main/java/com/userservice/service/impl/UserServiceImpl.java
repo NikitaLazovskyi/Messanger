@@ -1,5 +1,6 @@
 package com.userservice.service.impl;
 
+import com.userservice.bean.Session;
 import com.userservice.dto.UserDto;
 import com.userservice.entity.User;
 import com.userservice.exception.InvalidOperationException;
@@ -7,7 +8,7 @@ import com.userservice.exception.UnauthorizedAccessException;
 import com.userservice.mapper.UserMapper;
 import com.userservice.repository.UserRepository;
 import com.userservice.service.UserService;
-import com.userservice.bean.Session;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +16,12 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final Session session;
     private UserMapper userMapper = UserMapper.INSTANCE;
-
-    public UserServiceImpl(UserRepository userRepository, Session session) {
-        this.userRepository = userRepository;
-        this.session = session;
-    }
 
     @Override
     public UserDto create(UserDto userDto) {
@@ -43,12 +40,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<Void> login(UserDto userDto) {
-        if (Objects.nonNull(session.getUser())){
+        if (session.isLogged()) {
             throw new InvalidOperationException("User already logged in");
         }
         User user = userRepository.findByUserName(userDto.getUserName()).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
-        if (userDto.getPassword().equals(user.getPassword())){
-            session.setUser(user);
+        if (userDto.getPassword().equals(user.getPassword())) {
+            session.setUser(userMapper.mapUserDto(user));
             return ResponseEntity.ok().build();
         } else {
             throw new UnauthorizedAccessException("Wrong password");
@@ -56,8 +53,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto profile() {
+        if (session.isLogged())
+            return session.getUser();
+        else
+            throw new UnauthorizedAccessException("User is not logged in");
+    }
+
+    @Override
     public ResponseEntity<Void> logout() {
-        if (Objects.isNull(session.getUser())){
+        if (!session.isLogged()) {
             throw new InvalidOperationException("User is not logged in");
         }
         session.setUser(null);

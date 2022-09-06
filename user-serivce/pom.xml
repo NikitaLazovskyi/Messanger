@@ -17,6 +17,7 @@
         <hibernate-validator.version>7.0.5.Final</hibernate-validator.version>
         <spring.data.mongodb.version>3.4.2</spring.data.mongodb.version>
         <mongodb.driver.version>4.7.1</mongodb.driver.version>
+        <version.cglib>3.3.0</version.cglib>
     </properties>
 
     <parent>

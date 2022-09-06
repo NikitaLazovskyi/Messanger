@@ -3,8 +3,22 @@ server:
 database:
   uri: ${MONGO.URI}
   name: ${MONGO.NAME}
-#spring:
-#  data:
-#    mongodb:
-#      database: ${MONGO.NAME}
-#      uri: ${MONGO.URI}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: info, health, env, beans
+
+info:
+  app1:
+    name: User Service
+    version: 1.0.0
+  system:
+    os: ${os.name}
+    PID: ${PID}
+    user-country: ${user.country}
+    user-timezone: ${user.timezone}
