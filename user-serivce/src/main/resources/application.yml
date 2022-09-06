@@ -1,0 +1,10 @@
+server:
+  port: 8087
+database:
+  uri: ${MONGO.URI}
+  name: ${MONGO.NAME}
+#spring:
+#  data:
+#    mongodb:
+#      database: ${MONGO.NAME}
+#      uri: ${MONGO.URI}
