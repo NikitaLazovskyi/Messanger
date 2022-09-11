@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 public class UsernameServiceImpl implements UsernameService {
@@ -27,7 +29,9 @@ public class UsernameServiceImpl implements UsernameService {
     @Override
     @Transactional
     public UsernameDto update(String previousUsername, String updatedUsername) {
-        Username persisted = usernameRepository.findByUsername(previousUsername);
+        Username persisted = usernameRepository.findByUsername(previousUsername).orElseThrow(
+                ()->new EntityNotFoundException("user with username: " + previousUsername + " doesn't exist")
+        );
         persisted.setUsername(updatedUsername);
         usernameRepository.save(persisted);
         return usernameMapper.mapToDto(persisted);

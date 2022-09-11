@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,7 +17,16 @@ public class Room implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.LAZY)
     private Username creator;
+
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private Set<Username> members;
+
+    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    private List<Message> messages;
+
     private String name;
 }

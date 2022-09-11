@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class RoomController implements RoomApi {
     }
 
     @Override
-    public List<UsernameDto> showMembers(Long roomId) {
+    public Set<UsernameDto> showMembers(Long roomId) {
         return roomService.showMembers(roomId);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/room")
 public interface RoomApi {
@@ -28,5 +29,5 @@ public interface RoomApi {
     ResponseEntity<Void> removeMember(@RequestParam("roomId") Long roomId, @RequestParam("username") String username);
 
     @GetMapping("/members/{roomId}")
-    List<UsernameDto> showMembers(@PathVariable("roomId") Long roomId);
+    Set<UsernameDto> showMembers(@PathVariable("roomId") Long roomId);
 }
