@@ -37,6 +37,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto create(UserDto userDto) {
         User user = userMapper.mapUser(userDto);
+        if (userRepository.exists(user))
+            throw new InvalidOperationException(
+                String.format("User with username: %s or email: %s already exists",
+                        user.getUserName(),
+                        user.getEmail())
+            );
         User persisted = userRepository.insert(user);
         String body;
         try {

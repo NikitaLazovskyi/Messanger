@@ -1,7 +1,6 @@
 package com.userservice.repository.impl;
 
 import com.userservice.entity.User;
-import com.userservice.exception.InvalidOperationException;
 import com.userservice.repository.UserRepository;
 import com.userservice.repository.impl.enums.SelectUser;
 import lombok.RequiredArgsConstructor;
@@ -37,22 +36,18 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User insert(User user) {
-        if (!exists(user))
-            return mongoTemplate.insert(user, "users");
-        else
-            throw new InvalidOperationException(
-                    String.format("User with username: %s or email: %s already exists",
-                            user.getUserName(),
-                            user.getEmail())
-            );
+        return mongoTemplate.insert(user, "users");
     }
 
     @Override
     public boolean exists(User user) {
-        Query exists = new Query().addCriteria(
-                Criteria.where("userName").is(user.getUserName()).orOperator(
-                        Criteria.where("email").is(user.getEmail()))
+        Query exists = new Query();
+        Criteria criteria = new Criteria();
+        criteria.orOperator(
+                Criteria.where("userName").is(user.getUserName()),
+                Criteria.where("email").is(user.getEmail())
         );
+        exists.addCriteria(criteria);
         return mongoTemplate.exists(exists, User.class, "users");
     }
 
@@ -84,10 +79,10 @@ public class UserRepositoryImpl implements UserRepository {
         switch (by) {
             case USERNAME:
                 query.addCriteria(Criteria.where("userName").is(obj));
-            break;
+                break;
             case EMAIL:
                 query.addCriteria(Criteria.where("email").is(obj));
-            break;
+                break;
         }
         List<User> users = mongoTemplate.find(query, User.class, "users");
         return users.size() > 0 ? Optional.of(users.get(0)) : Optional.empty();
