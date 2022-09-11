@@ -6,6 +6,8 @@ import com.userservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class UserController implements UserApi {
 
@@ -21,8 +23,8 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<Void> update(UserDto userDto) {
-        return null;
+    public UserDto update(UserDto userDto) {
+        return userService.update(userDto);
     }
 
     @Override
@@ -53,5 +55,10 @@ public class UserController implements UserApi {
     @Override
     public UserDto getByUserName(String userName) {
         return userService.getByUserName(userName);
+    }
+
+    @Override
+    public List<UserDto> allUsers() {
+        return userService.allUsers();
     }
 }

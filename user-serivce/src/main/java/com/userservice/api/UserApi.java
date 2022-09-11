@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @Api(tags = "User management API")
@@ -24,7 +25,7 @@ public interface UserApi {
     @ApiOperation("Update user")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping
-    ResponseEntity<Void> update(@RequestBody UserDto userDto);
+    UserDto update(@RequestBody UserDto userDto);
 
     @ApiOperation("Login user")
     @ResponseStatus(HttpStatus.OK)
@@ -58,4 +59,9 @@ public interface UserApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/username/{userName}")
     UserDto getByUserName(@PathVariable String userName);
+
+    @ApiOperation("Get all users")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    List<UserDto> allUsers();
 }

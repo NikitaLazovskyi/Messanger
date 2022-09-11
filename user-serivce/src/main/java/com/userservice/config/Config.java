@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Configuration
-@Import(SwaggerConfig.class)
+@Import({SwaggerConfig.class, RabbitConfiguration.class})
 @EnableMongoRepositories(basePackages = "com.userservice.repository")
 @ComponentScan("com.userservice.bean")
 public class Config extends AbstractMongoClientConfiguration {

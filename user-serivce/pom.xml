@@ -17,7 +17,6 @@
         <hibernate-validator.version>7.0.5.Final</hibernate-validator.version>
         <spring.data.mongodb.version>3.2.3</spring.data.mongodb.version>
         <mongodb.driver.version>4.2.3</mongodb.driver.version>
-        <version.cglib>3.3.0</version.cglib>
     </properties>
 
     <parent>
@@ -43,6 +42,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
