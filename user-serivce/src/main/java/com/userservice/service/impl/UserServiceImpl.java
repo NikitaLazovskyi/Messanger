@@ -11,6 +11,7 @@ import com.userservice.exception.InvalidOperationException;
 import com.userservice.exception.UnauthorizedAccessException;
 import com.userservice.mapper.UserMapper;
 import com.userservice.repository.UserRepository;
+import com.userservice.repository.impl.enums.SelectUser;
 import com.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto create(UserDto userDto) {
         User user = userMapper.mapUser(userDto);
-        User persisted = userRepository.save(user);
+        User persisted = userRepository.insert(user);
         String body;
         try {
             body = objectMapper.writeValueAsString(new UsernameRegisterMessageDto(userDto.getUserName()));
@@ -50,12 +51,23 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto update(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
-        if (user == null) {
-            user = userRepository.findByUserName(userDto.getUserName()).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
+        SelectUser updateBy;
+        User user = userRepository.findBy(userDto.getEmail(), SelectUser.EMAIL).orElse(null);
+        if (user != null){
+            updateBy = SelectUser.EMAIL;
+        }else {
+            user = userRepository.findBy(userDto.getUserName(), SelectUser.USERNAME).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
+            if (user != null){
+                updateBy = SelectUser.USERNAME;
+            }
+            else{
+                throw new EntityNotFoundException(String.format("User with username: %s and/or email: %s doesn't exist", user.getUserName(), user.getEmail()));
+            }
         }
         userMapper.updateUserFieldsWithDto(userDto, user);
-        User persisted = userRepository.save(user);
+        User persisted = userRepository.update(user, updateBy);
+
+        //we are interested only in username changes
         if (!userDto.getUserName().equals(persisted.getUserName())) {
             String body;
             try {
@@ -73,7 +85,7 @@ public class UserServiceImpl implements UserService {
         if (session.isLogged()) {
             throw new InvalidOperationException("User already logged in");
         }
-        User user = userRepository.findByUserName(userDto.getUserName()).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
+        User user = userRepository.findBy(userDto.getUserName(), SelectUser.USERNAME).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
         if (userDto.getPassword().equals(user.getPassword())) {
             session.setUser(userMapper.mapUserDto(user));
             return ResponseEntity.ok().build();
@@ -99,20 +111,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<Void> delete(String userName) {
-        User user = userRepository.findByUserName(userName).orElseThrow(() -> new EntityNotFoundException("User with username " + userName + " not found"));
+        User user = userRepository.findBy(userName, SelectUser.USERNAME).orElseThrow(() -> new EntityNotFoundException("User with username " + userName + " not found"));
         userRepository.delete(user);
         return ResponseEntity.ok().build();
     }
 
     @Override
     public UserDto getByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
+        User user = userRepository.findBy(email, SelectUser.EMAIL).orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
         return userMapper.mapUserDto(user);
     }
 
     @Override
     public UserDto getByUserName(String userName) {
-        User user = userRepository.findByUserName(userName).orElseThrow(() -> new EntityNotFoundException("User with username " + userName + " not found"));
+        User user = userRepository.findBy(userName, SelectUser.USERNAME).orElseThrow(() -> new EntityNotFoundException("User with username " + userName + " not found"));
         return userMapper.mapUserDto(user);
     }
 

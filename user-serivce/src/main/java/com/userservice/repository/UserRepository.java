@@ -1,16 +1,23 @@
 package com.userservice.repository;
 
 import com.userservice.entity.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import com.userservice.repository.impl.enums.SelectUser;
+import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface UserRepository extends MongoRepository<User, String> {
-    Optional<User> findByUserName(String userName);
+public interface UserRepository {
 
-    Optional<User> findByEmail(String email);
+    List<User> findAll();
 
-    boolean existsByUserName(String username);
+    ResponseEntity<Void> delete(User user);
+
+    User insert(User user);
+
+    boolean exists(User user);
+
+    User update(User user, SelectUser by);
+
+    Optional<User> findBy(String obj, SelectUser by);
 }
