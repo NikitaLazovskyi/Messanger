@@ -15,17 +15,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "room_users",
         uniqueConstraints = {@UniqueConstraint(name = "UniqueEventAndListener",
-                columnNames = {"uid", "username"})})
+                columnNames = {"room", "username"})})
 public class RelRoomUser implements Serializable {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "uid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "room", nullable = false)
     @ToString.Exclude
     private Room room;
 
     @Id
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "username", nullable = false)
+    private Username username;
 
     @Override
     public boolean equals(Object o) {

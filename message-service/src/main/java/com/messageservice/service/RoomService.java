@@ -1,6 +1,7 @@
 package com.messageservice.service;
 
 import com.messageservice.dto.RoomDto;
+import com.messageservice.dto.UsernameDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface RoomService {
 
     ResponseEntity<Void> removeMember(Long roomId, String username);
 
-    List<String> showMembers(Long roomId);
+    List<UsernameDto> showMembers(Long roomId);
 }

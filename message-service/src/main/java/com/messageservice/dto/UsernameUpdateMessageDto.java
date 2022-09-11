@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomDto implements Serializable {
-    private Long id;
-    private UsernameDto creator;
-    private String name;
+public class UsernameUpdateMessageDto {
+    private String previousName;
+    private String updatedName;
 }

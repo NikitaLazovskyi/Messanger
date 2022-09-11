@@ -1,8 +1,10 @@
 package com.messageservice.service.impl;
 
 import com.messageservice.dto.RoomDto;
+import com.messageservice.dto.UsernameDto;
 import com.messageservice.entity.Room;
 import com.messageservice.mapper.RoomMapper;
+import com.messageservice.mapper.UsernameMapper;
 import com.messageservice.repository.RoomRepository;
 import com.messageservice.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +19,18 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
-    private final RoomMapper mapper = RoomMapper.INSTANCE;
+    private final RoomMapper roomMapper = RoomMapper.INSTANCE;
+    private final UsernameMapper usernameMapper = UsernameMapper.INSTANCE;
 
     @Override
     public RoomDto create(RoomDto roomDto) {
-        Room persisted = roomRepository.save(mapper.mapToEntity(roomDto));
-        return mapper.mapToDto(persisted);
+        Room persisted = roomRepository.save(roomMapper.mapToEntity(roomDto));
+        return roomMapper.mapToDto(persisted);
     }
 
     @Override
     public ResponseEntity<Void> delete(RoomDto roomDto) {
-        roomRepository.delete(mapper.mapToEntity(roomDto));
+        roomRepository.delete(roomMapper.mapToEntity(roomDto));
         return ResponseEntity.ok().build();
     }
 
@@ -35,12 +38,12 @@ public class RoomServiceImpl implements RoomService {
     public RoomDto rename(RoomDto roomDto) {
         Room room = roomRepository.getById(roomDto.getId());
         room.setName(roomDto.getName());
-        return mapper.mapToDto(roomRepository.save(room));
+        return roomMapper.mapToDto(roomRepository.save(room));
     }
 
     @Override
     public List<RoomDto> showAllRooms() {
-        return roomRepository.findAll().stream().map(mapper::mapToDto).collect(Collectors.toList());
+        return roomRepository.findAll().stream().map(roomMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -56,7 +59,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<String> showMembers(Long roomId) {
-        return roomRepository.getMembers(roomId);
+    public List<UsernameDto> showMembers(Long roomId) {
+        return roomRepository.getMembers(roomId).stream().map(usernameMapper::mapToDto).collect(Collectors.toList());
     }
 }

@@ -15,18 +15,18 @@ import java.util.Objects;
 @Entity
 @Table(name = "room_messages",
         uniqueConstraints = {@UniqueConstraint(name = "UniqueEventAndListener",
-                columnNames = {"id", "uid"})})
+                columnNames = {"roomId", "messageUid"})})
 public class RelRoomMessages implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "roomId", nullable = false)
     @ToString.Exclude
     private Room room;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "uid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "messageUid", nullable = false)
     @ToString.Exclude
     private Message message;
 

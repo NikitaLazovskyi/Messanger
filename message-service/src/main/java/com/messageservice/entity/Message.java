@@ -6,10 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -18,12 +16,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "uniqueUIDAndUsername", columnNames = {"uid","username"})})
-public class Message {
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uniqueUIDAndUsername", columnNames = {"uid","sender"})})
+public class Message implements Serializable {
     @Id
-    private final UUID uid = UUID.randomUUID();
-    private String username;
+    private UUID uid;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "sender", nullable = false)
+    private Username sender;
     private String message;
-    private Long roomId;
+    @OneToOne
+    @JoinColumn(name = "room", nullable = false)
+    private Room room;
     private Timestamp timestamp;
 }
