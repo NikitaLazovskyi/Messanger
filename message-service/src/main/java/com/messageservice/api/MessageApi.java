@@ -13,7 +13,4 @@ public interface MessageApi {
 
     @GetMapping("/room/{roomId}")
     List<MessageDto> showMessages(@PathVariable Long roomId);
-
-    @PostMapping("/emit")
-    ResponseEntity<String> emit(@RequestBody String message);
 }

@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 public class MessageController implements MessageApi {
     private final MessageService messageService;
-    private final RabbitTemplate amqpTemplate;
 
     @Override
     public ResponseEntity<Void> sendMessage(MessageDto message) {
@@ -27,12 +26,5 @@ public class MessageController implements MessageApi {
     @Override
     public List<MessageDto> showMessages(Long roomId) {
         return messageService.showMessages(roomId);
-    }
-
-    @Override
-    public ResponseEntity<String> emit(@RequestBody String message){
-        log.info("Emit to updateUsernameQueue");
-        amqpTemplate.convertAndSend("userExistence", message);
-        return ResponseEntity.ok("Success emit to queue");
     }
 }
