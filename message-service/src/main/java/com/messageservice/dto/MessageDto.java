@@ -1,5 +1,7 @@
 package com.messageservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.messageservice.entity.Room;
 import com.messageservice.entity.Username;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageDto {
     private UUID uid;
     private UsernameDto sender;

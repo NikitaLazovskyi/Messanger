@@ -40,7 +40,6 @@ public class RoomServiceImpl implements RoomService {
         );
         room.setCreator(creator);
         room.setMembers(new HashSet<>());
-        room.setMessages(new ArrayList<>());
         room.getMembers().add(creator);
         Room persisted = roomRepository.save(room);
         return roomMapper.mapToDto(persisted);

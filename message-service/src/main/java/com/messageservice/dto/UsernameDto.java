@@ -1,5 +1,6 @@
 package com.messageservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 @Data
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UsernameDto {
 
     private Long id;

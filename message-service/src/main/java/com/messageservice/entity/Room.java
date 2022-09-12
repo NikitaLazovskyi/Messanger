@@ -25,8 +25,5 @@ public class Room implements Serializable {
     @JoinColumn(unique = true)
     private Set<Username> members;
 
-    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    private List<Message> messages;
-
     private String name;
 }

@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Message implements Serializable {
     @Id
     private UUID uid;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "sender", nullable = false)
     private Username sender;
     private String message;

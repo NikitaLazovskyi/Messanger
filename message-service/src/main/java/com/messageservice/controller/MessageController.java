@@ -3,6 +3,7 @@ package com.messageservice.controller;
 import com.messageservice.api.MessageApi;
 import com.messageservice.dto.MessageDto;
 import com.messageservice.service.MessageService;
+import com.messageservice.service.enums.FormatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -26,5 +27,10 @@ public class MessageController implements MessageApi {
     @Override
     public List<MessageDto> showMessages(Long roomId) {
         return messageService.showMessages(roomId);
+    }
+
+    @Override
+    public List<MessageDto> showMessageShort(Long roomId) {
+        return messageService.showMessagesInFormat(FormatMessage.TEXT_AUTHOR, roomId);
     }
 }
