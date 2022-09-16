@@ -1,0 +1,49 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  users-mongodb:
+    image: mongo
+    container_name: users-mongodb
+    ports:
+      - "27017:27017"
+  messages-postgres:
+    image: postgres
+    container_name: messages-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: message-service-db
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: message-service-user-db
+  user-service:
+    image: user-service:1.0
+    container_name: user-service
+    depends_on:
+      - rabbitmq
+      - users-mongodb
+    ports:
+      - "8087:8087"
+    environment:
+      MONGO_URI: mongodb://users-mongodb:27017/
+      MONGO_NAME: messenger-mongodb
+      RABBIT_HOST: rabbitmq
+  message-service:
+    image: message-service:1.0
+    container_name: message-service
+    depends_on:
+      - rabbitmq
+      - messages-postgres
+    ports:
+      - "8078:8078"
+    environment:
+      DB_MSG_NAME: message-service-db
+      DB_MSG_PASSWORD: root
+      DB_MSG_URI: jdbc:postgresql://messages-postgres:5432/message-service-db
+      DB_MSG_USERNAME: message-service-user-db
+      RABBIT_HOST: rabbitmq
