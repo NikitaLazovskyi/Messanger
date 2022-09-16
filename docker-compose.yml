@@ -1,17 +1,26 @@
 version: "3"
 services:
   rabbitmq:
+    build:
+      context: ./
+      dockerfile: DockerfileRabbitMQ
     image: rabbitmq
     container_name: rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
   users-mongodb:
+    build:
+      context: ./
+      dockerfile: DockerfileMongo
     image: mongo
     container_name: users-mongodb
     ports:
       - "27017:27017"
   messages-postgres:
+    build:
+      context: ./
+      dockerfile: DockerfilePostgres
     image: postgres
     container_name: messages-postgres
     ports:
@@ -22,6 +31,9 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_USER: message-service-user-db
   user-service:
+    build:
+      context: ./user-serivce/
+      dockerfile: Dockerfile
     image: user-service:1.0
     container_name: user-service
     depends_on:
@@ -34,6 +46,9 @@ services:
       MONGO_NAME: messenger-mongodb
       RABBIT_HOST: rabbitmq
   message-service:
+    build:
+      context: ./message-service/
+      dockerfile: Dockerfile
     image: message-service:1.0
     container_name: message-service
     depends_on:
