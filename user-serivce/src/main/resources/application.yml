@@ -1,9 +1,10 @@
 server:
   port: 8087
 database:
-  uri: ${MONGO.URI}
-  name: ${MONGO.NAME}
-
+  uri: ${MONGO_URI}
+  name: ${MONGO_NAME}
+rabbit:
+  host: ${RABBIT_HOST}
 management:
   endpoint:
     health:

@@ -17,6 +17,7 @@
         <hibernate-validator.version>7.0.5.Final</hibernate-validator.version>
         <spring.data.mongodb.version>3.2.3</spring.data.mongodb.version>
         <mongodb.driver.version>4.2.3</mongodb.driver.version>
+        <main.class>com.userservice.UserServiceApplication</main.class>
     </properties>
 
     <parent>
@@ -88,4 +89,31 @@
             <version>${mongodb.driver.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>${main.class}</mainClass>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>user-service</finalName>
+    </build>
 </project>
