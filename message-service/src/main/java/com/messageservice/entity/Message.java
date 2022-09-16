@@ -1,6 +1,5 @@
 package com.messageservice.entity;
 
-import com.messageservice.entity.enums.ReceiverType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class Message implements Serializable {
     private UUID uid;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "sender", nullable = false)
-    private Username sender;
+    private User sender;
     private String message;
     @OneToOne
     @JoinColumn(name = "room", nullable = false)

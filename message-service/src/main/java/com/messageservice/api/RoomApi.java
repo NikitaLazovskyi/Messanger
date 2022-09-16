@@ -1,7 +1,7 @@
 package com.messageservice.api;
 
 import com.messageservice.dto.RoomDto;
-import com.messageservice.dto.UsernameDto;
+import com.messageservice.dto.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +29,5 @@ public interface RoomApi {
     ResponseEntity<Void> removeMember(@RequestParam("roomId") Long roomId, @RequestParam("username") String username);
 
     @GetMapping("/members/{roomId}")
-    Set<UsernameDto> showMembers(@PathVariable("roomId") Long roomId);
+    Set<UserDto> showMembers(@PathVariable("roomId") Long roomId);
 }

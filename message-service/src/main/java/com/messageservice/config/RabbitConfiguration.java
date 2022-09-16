@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,9 +18,12 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class RabbitConfiguration {
 
+    @Value("${rabbit.host}")
+    private String amqpHost;
+
     @Bean
     public ConnectionFactory connectionFactory(){
-        return new CachingConnectionFactory("localhost");
+        return new CachingConnectionFactory(amqpHost);
     }
 
     @Bean

@@ -1,8 +1,8 @@
 package com.messageservice.service;
 
-import com.messageservice.dto.UsernameDto;
+import com.messageservice.dto.UserDto;
 
 public interface UsernameService {
-    UsernameDto register(String username);
-    UsernameDto update(String previousUsername, String updatedUsername);
+    UserDto register(String username);
+    UserDto update(String previousUsername, String updatedUsername);
 }

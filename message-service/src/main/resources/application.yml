@@ -1,13 +1,14 @@
 server:
   port: 8078
-
+rabbit:
+  host: ${RABBIT_HOST}
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    name: message-service-db
-    username: ${db.msg.username}
-    password: ${db.msg.password}
-    url: ${db.msg.url}
+    name: ${DB_MSG_NAME}
+    username: ${DB_MSG_USERNAME}
+    password: ${DB_MSG_PASSWORD}
+    url: ${DB_MSG_URI}
   jpa:
     show-sql: true
     hibernate:

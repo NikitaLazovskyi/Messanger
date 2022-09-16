@@ -2,7 +2,7 @@ package com.messageservice.controller;
 
 import com.messageservice.api.RoomApi;
 import com.messageservice.dto.RoomDto;
-import com.messageservice.dto.UsernameDto;
+import com.messageservice.dto.UserDto;
 import com.messageservice.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class RoomController implements RoomApi {
     }
 
     @Override
-    public Set<UsernameDto> showMembers(Long roomId) {
+    public Set<UserDto> showMembers(Long roomId) {
         return roomService.showMembers(roomId);
     }
 }

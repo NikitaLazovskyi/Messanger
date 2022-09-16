@@ -16,6 +16,8 @@
         <swagger.version>2.9.2</swagger.version>
         <hibernate-validator.version>7.0.5.Final</hibernate-validator.version>
         <postgresql.version>42.4.0</postgresql.version>
+        <h2.version>1.4.194</h2.version>
+        <main.class>com.messageservice.MessageServiceApplication</main.class>
     </properties>
 
     <parent>
@@ -45,6 +47,11 @@
         <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -82,4 +89,30 @@
             <version>${postgresql.version}</version>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>message-service</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>${main.class}</mainClass>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

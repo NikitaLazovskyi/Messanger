@@ -1,9 +1,7 @@
 package com.messageservice.mapper;
 
-import com.messageservice.dto.MessageDto;
-import com.messageservice.dto.UsernameDto;
-import com.messageservice.entity.Message;
-import com.messageservice.entity.Username;
+import com.messageservice.dto.UserDto;
+import com.messageservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,7 +10,7 @@ public interface UsernameMapper {
 
     UsernameMapper INSTANCE = Mappers.getMapper(UsernameMapper.class);
 
-    Username mapToEntity(UsernameDto usernameDto);
+    User mapToEntity(UserDto userDto);
 
-    UsernameDto mapToDto(Username username);
+    UserDto mapToDto(User user);
 }

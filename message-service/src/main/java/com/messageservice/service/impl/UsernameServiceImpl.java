@@ -1,7 +1,7 @@
 package com.messageservice.service.impl;
 
-import com.messageservice.dto.UsernameDto;
-import com.messageservice.entity.Username;
+import com.messageservice.dto.UserDto;
+import com.messageservice.entity.User;
 import com.messageservice.mapper.UsernameMapper;
 import com.messageservice.repository.UsernameRepository;
 import com.messageservice.service.UsernameService;
@@ -19,17 +19,17 @@ public class UsernameServiceImpl implements UsernameService {
     private final UsernameMapper usernameMapper = UsernameMapper.INSTANCE;
 
     @Override
-    public UsernameDto register(String username) {
-        Username usernameEntity = new Username();
-        usernameEntity.setUsername(username);
-        Username persisted = usernameRepository.save(usernameEntity);
+    public UserDto register(String username) {
+        User userEntity = new User();
+        userEntity.setUsername(username);
+        User persisted = usernameRepository.save(userEntity);
         return usernameMapper.mapToDto(persisted);
     }
 
     @Override
     @Transactional
-    public UsernameDto update(String previousUsername, String updatedUsername) {
-        Username persisted = usernameRepository.findByUsername(previousUsername).orElseThrow(
+    public UserDto update(String previousUsername, String updatedUsername) {
+        User persisted = usernameRepository.findByUsername(previousUsername).orElseThrow(
                 ()->new EntityNotFoundException("user with username: " + previousUsername + " doesn't exist")
         );
         persisted.setUsername(updatedUsername);

@@ -11,6 +11,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RoomDto implements Serializable {
     private Long id;
-    private UsernameDto creator;
+    private UserDto creator;
     private String name;
 }

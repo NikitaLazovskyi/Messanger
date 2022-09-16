@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,11 +18,11 @@ public class Room implements Serializable {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Username creator;
+    private User creator;
 
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
-    private Set<Username> members;
+    private Set<User> members;
 
     private String name;
 }

@@ -1,9 +1,9 @@
 package com.messageservice.service.impl;
 
 import com.messageservice.dto.RoomDto;
-import com.messageservice.dto.UsernameDto;
+import com.messageservice.dto.UserDto;
 import com.messageservice.entity.Room;
-import com.messageservice.entity.Username;
+import com.messageservice.entity.User;
 import com.messageservice.mapper.RoomMapper;
 import com.messageservice.mapper.UsernameMapper;
 import com.messageservice.repository.RoomRepository;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +34,7 @@ public class RoomServiceImpl implements RoomService {
     public RoomDto create(RoomDto roomDto) {
         String username = roomDto.getCreator().getUsername();
         Room room = roomMapper.mapToEntity(roomDto);
-        Username creator = usernameRepository.findByUsername(username).orElseThrow(
+        User creator = usernameRepository.findByUsername(username).orElseThrow(
                 ()->new EntityNotFoundException("user with username: " + username + " doesn't exist")
         );
         room.setCreator(creator);
@@ -67,7 +66,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional
     public ResponseEntity<Void> addMember(Long roomId, String username) {
-        Username member = usernameRepository.findByUsername(username).orElseThrow(
+        User member = usernameRepository.findByUsername(username).orElseThrow(
                 ()->new EntityNotFoundException("user with username: " + username + " doesn't exist")
         );
         Room room = roomRepository.getById(roomId);
@@ -79,7 +78,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional
     public ResponseEntity<Void> removeMember(Long roomId, String username) {
-        Username member = usernameRepository.findByUsername(username).orElseThrow(
+        User member = usernameRepository.findByUsername(username).orElseThrow(
                 ()->new EntityNotFoundException("user with username: " + username + " doesn't exist")
         );
         Room room = roomRepository.getById(roomId);
@@ -89,7 +88,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Set<UsernameDto> showMembers(Long roomId) {
+    public Set<UserDto> showMembers(Long roomId) {
         return roomRepository.getById(roomId).getMembers().stream().map(usernameMapper::mapToDto).collect(Collectors.toSet());
     }
 }
