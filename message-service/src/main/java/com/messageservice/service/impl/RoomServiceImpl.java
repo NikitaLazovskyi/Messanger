@@ -45,8 +45,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public ResponseEntity<Void> delete(RoomDto roomDto) {
-        roomRepository.deleteById(roomDto.getId());
+    public ResponseEntity<Void> delete(Long roomId) {
+        roomRepository.deleteById(roomId);
         return ResponseEntity.ok().build();
     }
 

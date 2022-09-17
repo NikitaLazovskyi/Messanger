@@ -35,12 +35,12 @@ public interface UserApi {
     UserDto update(@RequestBody @Validated(OnUpdate.class) UserDto userDto);
 
     @ApiOperation("Login user")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/login")
     ResponseEntity<Void> login(@RequestBody @Validated(OnLogin.class) UserDto userDto);
 
     @ApiOperation("Logout user")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/logout")
     ResponseEntity<Void> logout();
 
@@ -50,10 +50,10 @@ public interface UserApi {
     UserDto profile();
 
     @ApiOperation("Delete user by username")
-    @ApiImplicitParams({@ApiImplicitParam(name = "username", paramType = "path", required = true,
+    @ApiImplicitParams({@ApiImplicitParam(name = "userName", paramType = "path", required = true,
             value = "Username")})
-    @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("'/delete/{userName}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/delete/{userName}")
     ResponseEntity<Void> delete(@PathVariable
                                 @ValidateString(value = StringItem.USERNAME, message = "{username} {invalid}")
                                 String userName);
