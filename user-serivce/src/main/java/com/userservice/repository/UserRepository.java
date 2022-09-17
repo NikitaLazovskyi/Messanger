@@ -17,6 +17,8 @@ public interface UserRepository {
 
     boolean exists(User user);
 
+    boolean existsBy(SelectUser by, String item);
+
     User update(User user, SelectUser by);
 
     Optional<User> findBy(String obj, SelectUser by);

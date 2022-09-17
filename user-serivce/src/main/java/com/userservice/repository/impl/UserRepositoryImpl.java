@@ -51,6 +51,30 @@ public class UserRepositoryImpl implements UserRepository {
         return mongoTemplate.exists(exists, User.class, "users");
     }
 
+    /**
+     * return true if provided enum SelectUser doesn't exist
+     */
+    @Override
+    public boolean existsBy(SelectUser by, String item) {
+        Query exists = new Query();
+        Criteria criteria;
+        switch (by){
+            case EMAIL:
+                criteria = Criteria.where("email").is(item);
+                break;
+            case USERNAME:
+                criteria = Criteria.where("userName").is(item);
+                break;
+            default:
+                return true;
+        }
+        exists.addCriteria(criteria);
+        return mongoTemplate.exists(exists, User.class, "users");
+    }
+
+    /**
+     * return null if provided enum SelectUser doesn't exist
+     */
     @Override
     public User update(User user, SelectUser by) {
         Query query;
@@ -73,6 +97,9 @@ public class UserRepositoryImpl implements UserRepository {
         return mongoTemplate.findAndModify(query, update, User.class);
     }
 
+    /**
+     * return Optional.empty() if provided enum SelectUser doesn't exist
+     */
     @Override
     public Optional<User> findBy(String obj, SelectUser by) {
         Query query = new Query();
@@ -83,6 +110,8 @@ public class UserRepositoryImpl implements UserRepository {
             case EMAIL:
                 query.addCriteria(Criteria.where("email").is(obj));
                 break;
+            default:
+                return Optional.empty();
         }
         List<User> users = mongoTemplate.find(query, User.class, "users");
         return users.size() > 0 ? Optional.of(users.get(0)) : Optional.empty();

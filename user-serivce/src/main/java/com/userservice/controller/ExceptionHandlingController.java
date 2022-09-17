@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -38,6 +39,12 @@ public class ExceptionHandlingController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorModel handleEntityNotFoundException(EntityNotFoundException ex) {
         log.error("handleEntityNotFoundException: exception {}", ex.getMessage(), ex);
+        return new ErrorModel(ex.getMessage(), ErrorType.NOT_FOUND_ERROR_TYPE, LocalDateTime.now());
+    }
+    @ExceptionHandler(EntityExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorModel handleEntityExistsException(EntityExistsException ex) {
+        log.error("handleEntityExistsException: exception {}", ex.getMessage(), ex);
         return new ErrorModel(ex.getMessage(), ErrorType.NOT_FOUND_ERROR_TYPE, LocalDateTime.now());
     }
 
@@ -79,8 +86,8 @@ public class ExceptionHandlingController {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorModel handleConstraintViolationException(ConstraintViolationException ex) {
-        log.error("handleEntityNotFoundExceptionPersistencePcg: exception {}", ex.getMessage(), ex);
+    public ErrorModel constraintViolationException(ConstraintViolationException ex) {
+        log.error("ConstraintViolationException: exception {}", ex.getMessage(), ex);
         return new ErrorModel(ex.getMessage(), ErrorType.INVALID_DATA_ERROR_TYPE, LocalDateTime.now());
     }
 }
