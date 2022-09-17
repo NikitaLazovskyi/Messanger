@@ -17,8 +17,6 @@ import javax.validation.constraints.Email;
 @AllArgsConstructor
 @Builder
 public class User {
-    //    @NotBlank
-//    @Size(min = 5, max = 40)
     @Id
     @Indexed(unique = true)
     private String userName;
@@ -27,10 +25,7 @@ public class User {
     private String number;
     @Id
     @Indexed(unique = true)
-    @Email(message = "Invalid email address")
     private String email;
-    //    @NotBlank
-//    @Size(min = 8, max = 255)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 }

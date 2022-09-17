@@ -1,7 +1,5 @@
 package com.userservice.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.userservice.bean.Session;
 import com.userservice.dto.UserDto;
 import com.userservice.dto.UsernameRegisterMessageDto;
@@ -12,10 +10,10 @@ import com.userservice.exception.UnauthorizedAccessException;
 import com.userservice.mapper.UserMapper;
 import com.userservice.repository.UserRepository;
 import com.userservice.repository.impl.enums.SelectUser;
+import com.userservice.service.RabbitService;
 import com.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,67 +29,63 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final RabbitTemplate rabbitTemplate;
+    private final RabbitService rabbitService;
+
     private final UserRepository userRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final Session session;
     private final UserMapper userMapper = UserMapper.INSTANCE;
 
     @Override
     @Transactional
     public UserDto create(UserDto userDto) {
+        String routingKey = "user.register";
+        String exchanger = "topic-exchanger";
+
         User user = userMapper.mapUser(userDto);
         HashMap<SelectUser, Boolean> constraints = new HashMap<>();
         constraints.put(SelectUser.EMAIL, null);
         constraints.put(SelectUser.USERNAME, null);
         constraints.entrySet().stream().peek(e -> e.setValue(userRepository.existsBy(e.getKey(), userDto.getUserName())))
                 .forEach(entry -> {
-            if (entry.getValue()) {
-                throw new EntityExistsException(String.format(
-                        "This %s already exist",
-                        entry.getKey().toString().toLowerCase()));
-            }
-        });
+                    if (entry.getValue()) {
+                        throw new EntityExistsException(String.format(
+                                "This %s already exist",
+                                entry.getKey().toString().toLowerCase()));
+                    }
+                });
         User persisted = userRepository.insert(user);
         log.info("User was created with username: {} and email: {}", persisted.getUserName(), persisted.getEmail());
-        String body;
-        try {
-            body = objectMapper.writeValueAsString(new UsernameRegisterMessageDto(userDto.getUserName()));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        rabbitTemplate.convertAndSend("userRegisterQueue", body);
+        rabbitService.send(exchanger, routingKey, new UsernameRegisterMessageDto(persisted.getUserName()));
+        log.info("Creating username: {} notification was sent by routing key: {} to exchanger: {}", persisted.getUserName(), routingKey, exchanger);
         return userMapper.mapUserDto(persisted);
     }
 
     @Override
     @Transactional
     public UserDto update(UserDto userDto) {
+        String routingKey = "user.update";
+        String exchanger = "topic-exchanger";
+        String previousUsername;
         SelectUser updateBy;
         User user = userRepository.findBy(userDto.getEmail(), SelectUser.EMAIL).orElse(null);
         if (user != null) {
+            previousUsername = user.getUserName();
             updateBy = SelectUser.EMAIL;
         } else {
             user = userRepository.findBy(userDto.getUserName(), SelectUser.USERNAME).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
             if (user != null) {
+                previousUsername = user.getUserName();
                 updateBy = SelectUser.USERNAME;
             } else {
-                throw new EntityNotFoundException(String.format("User with username: %s and/or email: %s doesn't exist", user.getUserName(), user.getEmail()));
+                throw new EntityNotFoundException(String.format("User with username: %s and email: %s was not found", userDto.getUserName(), userDto.getEmail()));
             }
         }
         userMapper.updateUserFieldsWithDto(userDto, user);
         User persisted = userRepository.update(user, updateBy);
-        log.info("User was updated with username: {} and email: {}", persisted.getUserName(), persisted.getEmail());
-
-        //we are interested only in username changes
-        if (!userDto.getUserName().equals(persisted.getUserName())) {
-            String body;
-            try {
-                body = objectMapper.writeValueAsString(new UsernameUpdateMessageDto(persisted.getUserName(), userDto.getUserName()));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            rabbitTemplate.convertAndSend("userUpdateQueue", body);
+        log.info("User was updated with email: {}", persisted.getEmail());
+        if (!userDto.getUserName().equals(previousUsername)) {
+            rabbitService.send(exchanger, routingKey, new UsernameUpdateMessageDto(previousUsername, userDto.getUserName()));
+            log.info("Updating username: {} to {} notification was sent by routing key: {} to exchanger: {}", previousUsername, userDto.getUserName(), routingKey, exchanger);
         }
         return userMapper.mapUserDto(persisted);
     }

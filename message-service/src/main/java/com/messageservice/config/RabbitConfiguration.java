@@ -46,18 +46,18 @@ public class RabbitConfiguration {
         return new Queue("userRegisterQueue");
     }
 
-//    @Bean
-//    public TopicExchange directExchange(){
-//        return new TopicExchange("topic-exchange");
-//    }
-//
-//    @Bean
-//    public Binding bindingUpdate(){
-//        return BindingBuilder.bind(userUpdateQueue()).to(directExchange()).with("user-update");
-//    }
-//
-//    @Bean
-//    public Binding bindingRegister(){
-//        return BindingBuilder.bind(userRegisterQueue()).to(directExchange()).with("user-register");
-//    }
+    @Bean
+    public TopicExchange topicExchange(){
+        return new TopicExchange("topic-exchanger");
+    }
+
+    @Bean
+    public Binding bindingUpdate(){
+        return BindingBuilder.bind(userUpdateQueue()).to(topicExchange()).with("user.update");
+    }
+
+    @Bean
+    public Binding bindingRegister(){
+        return BindingBuilder.bind(userRegisterQueue()).to(topicExchange()).with("user.register");
+    }
 }

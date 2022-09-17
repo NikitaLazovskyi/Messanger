@@ -6,11 +6,13 @@ import com.messageservice.mapper.UsernameMapper;
 import com.messageservice.repository.UsernameRepository;
 import com.messageservice.service.UsernameService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UsernameServiceImpl implements UsernameService {
@@ -23,17 +25,19 @@ public class UsernameServiceImpl implements UsernameService {
         User userEntity = new User();
         userEntity.setUsername(username);
         User persisted = usernameRepository.save(userEntity);
+        log.info("Username {} was registered ", persisted.getUsername());
         return usernameMapper.mapToDto(persisted);
     }
 
     @Override
     @Transactional
-    public UserDto update(String previousUsername, String updatedUsername) {
+    public UserDto update(String previousUsername, String currentUsername) {
         User persisted = usernameRepository.findByUsername(previousUsername).orElseThrow(
                 ()->new EntityNotFoundException("user with username: " + previousUsername + " doesn't exist")
         );
-        persisted.setUsername(updatedUsername);
+        persisted.setUsername(currentUsername);
         usernameRepository.save(persisted);
+        log.info("Username {} was updated to {} ", previousUsername, currentUsername);
         return usernameMapper.mapToDto(persisted);
     }
 }

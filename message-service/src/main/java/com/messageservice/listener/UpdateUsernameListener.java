@@ -24,6 +24,7 @@ public class UpdateUsernameListener {
 
     @RabbitListener(queues = "userRegisterQueue")
     public void processMessageRegister(String message){
+        log.info("Received from queue {}", message);
         UsernameRegisterMessageDto obj;
         try {
              obj = objectMapper.readValue(message, UsernameRegisterMessageDto.class);
@@ -31,11 +32,11 @@ public class UpdateUsernameListener {
             throw new RuntimeException(e);
         }
         usernameService.register(obj.getUsername());
-        log.info("Received from queue {}", message);
     }
 
     @RabbitListener(queues = "userUpdateQueue")
     public void processMessageUpdate(String message){
+        log.info("Received from queue {}", message);
         UsernameUpdateMessageDto obj;
         try {
             obj = objectMapper.readValue(message, UsernameUpdateMessageDto.class);
@@ -43,6 +44,5 @@ public class UpdateUsernameListener {
             throw new RuntimeException(e);
         }
         usernameService.update(obj.getPreviousName(), obj.getUpdatedName());
-        log.info("Received from queue {}", message);
     }
 }
