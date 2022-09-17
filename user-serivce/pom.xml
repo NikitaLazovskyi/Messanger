@@ -14,7 +14,7 @@
         <lombok.version>1.18.24</lombok.version>
         <mapstruct.version>1.5.1.Final</mapstruct.version>
         <swagger.version>2.9.2</swagger.version>
-        <hibernate-validator.version>7.0.5.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.0.10.Final</hibernate-validator.version>
         <spring.data.mongodb.version>3.2.3</spring.data.mongodb.version>
         <mongodb.driver.version>4.2.3</mongodb.driver.version>
         <main.class>com.userservice.UserServiceApplication</main.class>

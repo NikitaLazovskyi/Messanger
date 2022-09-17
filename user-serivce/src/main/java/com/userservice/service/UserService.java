@@ -7,12 +7,20 @@ import java.util.List;
 
 public interface UserService {
     UserDto create(UserDto userDto);
+
     UserDto update(UserDto userDto);
+
     ResponseEntity<Void> login(UserDto userDto);
+
     UserDto profile();
+
     ResponseEntity<Void> logout();
-    public ResponseEntity<Void> delete(String username);
+
+    ResponseEntity<Void> delete(String username);
+
     UserDto getByEmail(String email);
+
     UserDto getByUserName(String userName);
+
     List<UserDto> allUsers();
 }

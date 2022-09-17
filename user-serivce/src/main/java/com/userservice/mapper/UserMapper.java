@@ -2,7 +2,6 @@ package com.userservice.mapper;
 
 import com.userservice.dto.UserDto;
 import com.userservice.entity.User;
-import com.userservice.exception.InvalidOperationException;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -17,7 +16,7 @@ public interface UserMapper {
 
     UserDto mapUserDto(User user);
 
-    default void updateUserFieldsWithDto(UserDto userDto, User user){
+    default void updateUserFieldsWithDto(UserDto userDto, User user) {
         boolean usernameKey = user.getUserName().equals(userDto.getUserName());
         boolean emailKey = user.getEmail().equals(userDto.getEmail());
 

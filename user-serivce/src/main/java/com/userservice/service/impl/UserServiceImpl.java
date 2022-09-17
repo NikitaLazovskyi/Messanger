@@ -39,9 +39,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.mapUser(userDto);
         if (userRepository.exists(user))
             throw new InvalidOperationException(
-                String.format("User with username: %s or email: %s already exists",
-                        user.getUserName(),
-                        user.getEmail())
+                    String.format("User with username: %s or email: %s already exists",
+                            user.getUserName(),
+                            user.getEmail())
             );
         User persisted = userRepository.insert(user);
         String body;
@@ -59,14 +59,13 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         SelectUser updateBy;
         User user = userRepository.findBy(userDto.getEmail(), SelectUser.EMAIL).orElse(null);
-        if (user != null){
+        if (user != null) {
             updateBy = SelectUser.EMAIL;
-        }else {
+        } else {
             user = userRepository.findBy(userDto.getUserName(), SelectUser.USERNAME).orElseThrow(() -> new EntityNotFoundException("User with username: " + userDto.getUserName() + " doesn't exist"));
-            if (user != null){
+            if (user != null) {
                 updateBy = SelectUser.USERNAME;
-            }
-            else{
+            } else {
                 throw new EntityNotFoundException(String.format("User with username: %s and/or email: %s doesn't exist", user.getUserName(), user.getEmail()));
             }
         }

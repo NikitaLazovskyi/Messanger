@@ -1,7 +1,6 @@
 package com.userservice.bean;
 
 import com.userservice.dto.UserDto;
-import com.userservice.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,8 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class Session {
     private UserDto user;
-    public boolean isLogged(){
+
+    public boolean isLogged() {
         return user != null;
     }
 }

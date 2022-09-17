@@ -1,55 +1,30 @@
 package com.userservice.config;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-
-import java.util.Collection;
-import java.util.Collections;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@Import({SwaggerConfig.class, RabbitConfiguration.class})
-@EnableMongoRepositories(basePackages = "com.userservice.repository")
 @ComponentScan("com.userservice.bean")
-public class Config extends AbstractMongoClientConfiguration {
-    @Value("${database.uri}")
-    private String uri;
-    @Value("${database.name}")
-    private String dbName;
-
-    @Override
-    protected String getDatabaseName() {
-        return dbName;
-    }
-
-    @Override
-    @Bean
-    public MongoClient mongoClient() {
-        ConnectionString connectionString = new ConnectionString(uri);
-        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString)
-                .build();
-
-        return MongoClients.create(mongoClientSettings);
-    }
-
+@Import({SwaggerConfig.class, RabbitConfiguration.class, MongoConfig.class})
+public class Config {
 
     @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongoClient(), dbName);
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:error_messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 
-    @Override
-    public Collection getMappingBasePackages() {
-        return Collections.singleton("com.userservice");
+    @Bean
+    public LocalValidatorFactoryBean getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
     }
 }
