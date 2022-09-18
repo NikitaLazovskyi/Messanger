@@ -31,7 +31,7 @@ public class UpdateUsernameListener {
             throw new RuntimeException(e);
         }
         usernameService.register(obj.getUsername());
-        log.info("Received from queue {}", message);
+        log.info("Register message was received from queue {}", message);
     }
 
     @RabbitListener(queues = "userUpdateQueue")
@@ -43,6 +43,6 @@ public class UpdateUsernameListener {
             throw new RuntimeException(e);
         }
         usernameService.update(obj.getPreviousName(), obj.getUpdatedName());
-        log.info("Received from queue {}", message);
+        log.info("Update message was received from queue {}", message);
     }
 }
