@@ -1,8 +1,10 @@
 package com.messageservice.service.impl;
 
 import com.messageservice.dto.MessageDto;
+import com.messageservice.dto.UserDto;
 import com.messageservice.entity.Message;
 import com.messageservice.mapper.MessageMapper;
+import com.messageservice.mapper.UsernameMapper;
 import com.messageservice.repository.MessageRepository;
 import com.messageservice.repository.UsernameRepository;
 import com.messageservice.service.MessageService;
@@ -25,11 +27,11 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final UsernameRepository usernameRepository;
-    private final MessageMapper mapper = MessageMapper.INSTANCE;
+    private final MessageMapper messageMapper = MessageMapper.INSTANCE;
 
     @Override
     public ResponseEntity<Void> sendMessage(MessageDto messageDto) {
-        Message message = mapper.mapToEntity(messageDto);
+        Message message = messageMapper.mapToEntity(messageDto);
         message.setUid(UUID.randomUUID());
         message.setTimestamp(Timestamp.from(Instant.now()));
         message.setSender(usernameRepository.findByUsername(messageDto.getSender().getUsername()).orElseThrow(
@@ -42,7 +44,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<MessageDto> showMessages(Long roomId) {
-        return messageRepository.findAllByRoomId(roomId, Sort.by("timestamp").descending()).stream().map(mapper::mapToDto).collect(Collectors.toList());
+        return messageRepository.findAllByRoomId(roomId, Sort.by("timestamp").descending()).stream().map(messageMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -54,12 +56,12 @@ public class MessageServiceImpl implements MessageService {
                     m.setTimestamp(null);
                     m.setUid(null);
                     m.setRoom(null);
-                }).map(mapper::mapToDto).collect(Collectors.toList());
+                }).map(messageMapper::mapToDto).collect(Collectors.toList());
             case TEXT_AUTHOR_TIME:
                 return messageRepository.findAllByRoomId(roomId, Sort.by("timestamp").descending()).stream().peek(m -> {
                     m.setUid(null);
                     m.setRoom(null);
-                }).map(mapper::mapToDto).collect(Collectors.toList());
+                }).map(messageMapper::mapToDto).collect(Collectors.toList());
             default:
                 return null;
         }

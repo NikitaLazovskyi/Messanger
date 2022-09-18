@@ -21,7 +21,6 @@ import java.util.List;
 
 @Api(tags = "User management API")
 @RequestMapping("/api/v1/users")
-@Validated
 public interface UserApi {
 
     @ApiOperation("Create user")

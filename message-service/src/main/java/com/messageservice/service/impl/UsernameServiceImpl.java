@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +37,11 @@ public class UsernameServiceImpl implements UsernameService {
         persisted.setUsername(updatedUsername);
         usernameRepository.save(persisted);
         return usernameMapper.mapToDto(persisted);
+    }
+
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return usernameRepository.findAll().stream().map(usernameMapper::mapToDto).collect(Collectors.toList());
     }
 }
