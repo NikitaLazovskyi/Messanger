@@ -38,7 +38,7 @@ public interface RoomApi {
 
     @ApiOperation("Rename room")
     @ApiImplicitParams({@ApiImplicitParam(name = "roomDto", paramType = "body", required = true,
-    value = "Requirements: roomDto must contain an ID and name, that will be set to founded by ID room")})
+            value = "Requirements: roomDto must contain an ID and name, that will be set to founded by ID room")})
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping
     RoomDto rename(@RequestBody @Validated({OnRenameRoom.class}) RoomDto roomDto);

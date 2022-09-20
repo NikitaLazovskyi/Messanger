@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.userservice.dto.UsernameRegisterMessageDto;
 import com.userservice.dto.UsernameUpdateMessageDto;
-import com.userservice.exception.InvalidOperationException;
 import com.userservice.service.RabbitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

@@ -1,18 +1,14 @@
 package com.messageservice.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 
 @Slf4j
@@ -23,42 +19,42 @@ public class RabbitConfiguration {
     private String amqpHost;
 
     @Bean
-    public ConnectionFactory connectionFactory(){
+    public ConnectionFactory connectionFactory() {
         return new CachingConnectionFactory(amqpHost);
     }
 
     @Bean
-    public AmqpAdmin amqpAdmin(){
+    public AmqpAdmin amqpAdmin() {
         return new RabbitAdmin(connectionFactory());
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(){
+    public RabbitTemplate rabbitTemplate() {
         return new RabbitTemplate(connectionFactory());
     }
 
     @Bean
-    public Queue userUpdateQueue(){
+    public Queue userUpdateQueue() {
         return new Queue("userUpdateQueue");
     }
 
     @Bean
-    public Queue userRegisterQueue(){
+    public Queue userRegisterQueue() {
         return new Queue("userRegisterQueue");
     }
 
     @Bean
-    public TopicExchange topicExchange(){
+    public TopicExchange topicExchange() {
         return new TopicExchange("topic-exchanger");
     }
 
     @Bean
-    public Binding bindingUpdate(){
+    public Binding bindingUpdate() {
         return BindingBuilder.bind(userUpdateQueue()).to(topicExchange()).with("user.update");
     }
 
     @Bean
-    public Binding bindingRegister(){
+    public Binding bindingRegister() {
         return BindingBuilder.bind(userRegisterQueue()).to(topicExchange()).with("user.register");
     }
 }

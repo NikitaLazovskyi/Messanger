@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface UsernameService {
     UserDto register(String username);
+
     UserDto update(String previousUsername, String updatedUsername);
 
     List<UserDto> getAllUsers();

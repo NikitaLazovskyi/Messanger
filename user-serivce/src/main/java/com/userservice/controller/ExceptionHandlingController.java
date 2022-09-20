@@ -3,8 +3,8 @@ package com.userservice.controller;
 import com.mongodb.DuplicateKeyException;
 import com.userservice.exception.InvalidOperationException;
 import com.userservice.exception.UnauthorizedAccessException;
-import com.userservice.model.ErrorType;
 import com.userservice.model.ErrorModel;
+import com.userservice.model.ErrorType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -29,10 +29,10 @@ public class ExceptionHandlingController {
     public List<ErrorModel> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("handleMethodArgumentNotValidException: exception {}", ex.getMessage(), ex);
         return ex.getBindingResult()
-                 .getAllErrors()
-                 .stream()
-                 .map(err -> new ErrorModel(err.getDefaultMessage(), ErrorType.VALIDATION_ERROR_TYPE, LocalDateTime.now()))
-                 .collect(Collectors.toList());
+                .getAllErrors()
+                .stream()
+                .map(err -> new ErrorModel(err.getDefaultMessage(), ErrorType.VALIDATION_ERROR_TYPE, LocalDateTime.now()))
+                .collect(Collectors.toList());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -41,6 +41,7 @@ public class ExceptionHandlingController {
         log.error("handleEntityNotFoundException: exception {}", ex.getMessage(), ex);
         return new ErrorModel(ex.getMessage(), ErrorType.NOT_FOUND_ERROR_TYPE, LocalDateTime.now());
     }
+
     @ExceptionHandler(EntityExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorModel handleEntityExistsException(EntityExistsException ex) {

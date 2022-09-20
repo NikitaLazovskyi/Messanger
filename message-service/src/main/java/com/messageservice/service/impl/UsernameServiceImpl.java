@@ -36,7 +36,7 @@ public class UsernameServiceImpl implements UsernameService {
     @Transactional
     public UserDto update(String previousUsername, String currentUsername) {
         User persisted = usernameRepository.findByUsername(previousUsername).orElseThrow(
-                ()->new EntityNotFoundException("user with username: " + previousUsername + " doesn't exist")
+                () -> new EntityNotFoundException("user with username: " + previousUsername + " doesn't exist")
         );
         persisted.setUsername(currentUsername);
         usernameRepository.save(persisted);

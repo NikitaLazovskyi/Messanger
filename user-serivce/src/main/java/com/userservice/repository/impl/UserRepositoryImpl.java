@@ -58,7 +58,7 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean existsBy(SelectUser by, String item) {
         Query exists = new Query();
         Criteria criteria;
-        switch (by){
+        switch (by) {
             case EMAIL:
                 criteria = Criteria.where("email").is(item);
                 break;

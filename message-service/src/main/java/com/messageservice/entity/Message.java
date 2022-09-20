@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "uniqueUIDAndUsername", columnNames = {"uid","sender"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uniqueUIDAndUsername", columnNames = {"uid", "sender"})})
 public class Message implements Serializable {
     @Id
     private UUID uid;

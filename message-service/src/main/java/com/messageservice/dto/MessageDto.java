@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.messageservice.dto.group.OnSendMessage;
 import com.messageservice.dto.strings.StringItem;
 import com.messageservice.dto.strings.ValidateString;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -27,7 +30,7 @@ public class MessageDto {
     @Valid
     private UserDto sender;
 
-    @NotNull(message = "{room} {not_null}", groups = OnSendMessage.class )
+    @NotNull(message = "{room} {not_null}", groups = OnSendMessage.class)
     @Valid
     private RoomDto room;
 

@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
 
 @Document(collection = "users")
 @Data
