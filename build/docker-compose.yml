@@ -1,27 +1,27 @@
 version: "3"
 services:
   rabbitmq:
-    image: rabbitmq
-    build:
-      context: ./
-      dockerfile: DockerfileRabbitMQ
+    image: rabbitmq:3.10-management
+#    build:
+#      context: ./
+#      dockerfile: DockerfileRabbitMQ
     container_name: rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
   users-mongodb:
-    image: mongo
-    build:
-      context: ./
-      dockerfile: DockerfileMongo
+    image: mongo:latest
+#    build:
+#      context: ./
+#      dockerfile: DockerfileMongo
     container_name: users-mongodb
     ports:
       - "27017:27017"
   messages-postgres:
-    image: postgres
-    build:
-      context: ./
-      dockerfile: DockerfilePostgres
+    image: postgres:12
+#    build:
+#      context: ./
+#      dockerfile: DockerfilePostgres
     container_name: messages-postgres
     ports:
       - "5432:5432"
