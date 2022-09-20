@@ -10,6 +10,7 @@ public class StringItemValidator implements ConstraintValidator<ValidateString, 
     private final String LASTNAME = "^[-' \\p{L}]{2,20}$";
     private final String USERNAME = "^\\w{5,25}$";
     private final String NUMBER = "^[0-9]{10}$";
+    private final String EMAIL = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
     //        private final String PASSWORD = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
     private final String PASSWORD = "^\\w{8,20}$";
@@ -23,6 +24,7 @@ public class StringItemValidator implements ConstraintValidator<ValidateString, 
         validations.put(StringItem.LASTNAME, LASTNAME);
         validations.put(StringItem.NUMBER, NUMBER);
         validations.put(StringItem.PASSWORD, PASSWORD);
+        validations.put(StringItem.EMAIL, EMAIL);
 
         item = constraintAnnotation.value();
     }

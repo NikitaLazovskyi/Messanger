@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Email;
 import java.util.List;
 
 
@@ -62,7 +61,9 @@ public interface UserApi {
             value = "User email")})
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/email/{email}")
-    UserDto getByEmail(@PathVariable @Email(message = "{email} {invalid}") String email);
+    UserDto getByEmail(@PathVariable
+                       @ValidateString(value = StringItem.EMAIL, message = "{email} {invalid}")
+                       String email);
 
     @ApiOperation("Get user by username")
     @ApiImplicitParams({@ApiImplicitParam(name = "username", paramType = "path", required = true,

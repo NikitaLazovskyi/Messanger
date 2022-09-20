@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 
@@ -42,7 +41,7 @@ public class UserDto {
     @Null(message = "{username} {null}", groups = {OnLogin.class})
     private String number;
 
-    @Email(message = "{email} {invalid}", groups = {OnCreate.class, OnLogin.class, OnUpdate.class})
+    @ValidateString(value = StringItem.EMAIL, message = "{email} {invalid}", groups = {OnCreate.class, OnLogin.class, OnUpdate.class})
     @NotBlank(message = "{email} {not_blank}", groups = {OnCreate.class, OnLogin.class})
     private String email;
 
