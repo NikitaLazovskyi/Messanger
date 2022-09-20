@@ -46,8 +46,7 @@ public class UserDto {
     @NotBlank(message = "{email} {not_blank}", groups = {OnCreate.class, OnLogin.class})
     private String email;
 
-    @NotBlank(message = "{password} {not_blank}", groups = {OnCreate.class, OnUpdate.class, OnLogin.class})
-    @ValidateString(value = StringItem.PASSWORD, message = "{password} {invalid}", groups = {OnCreate.class, OnLogin.class})
-    @Null(message = "{password} {null}", groups = OnUpdate.class)
+    @NotBlank(message = "{password} {not_blank}", groups = {OnCreate.class, OnLogin.class})
+    @ValidateString(value = StringItem.PASSWORD, message = "{password} {invalid}", groups = {OnCreate.class, OnLogin.class, OnUpdate.class})
     private String password;
 }

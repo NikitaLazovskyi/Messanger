@@ -27,19 +27,20 @@ public class UsernameServiceImpl implements UsernameService {
         User userEntity = new User();
         userEntity.setUsername(username);
         User persisted = usernameRepository.save(userEntity);
-        log.info("The username {} was registered", username);
+        log.info("Username {} was registered ", persisted.getUsername());
+
         return usernameMapper.mapToDto(persisted);
     }
 
     @Override
     @Transactional
-    public UserDto update(String previousUsername, String updatedUsername) {
+    public UserDto update(String previousUsername, String currentUsername) {
         User persisted = usernameRepository.findByUsername(previousUsername).orElseThrow(
                 ()->new EntityNotFoundException("user with username: " + previousUsername + " doesn't exist")
         );
-        persisted.setUsername(updatedUsername);
+        persisted.setUsername(currentUsername);
         usernameRepository.save(persisted);
-        log.info("The username {} was updated to {}", previousUsername, updatedUsername);
+        log.info("Username {} was updated to {} ", previousUsername, currentUsername);
         return usernameMapper.mapToDto(persisted);
     }
 
