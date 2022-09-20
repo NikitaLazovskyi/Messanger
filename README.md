@@ -1,5 +1,4 @@
 # Quick start
-NOTE! Next guide applicable only to Windows OS.
 
 ## 1. Docker
 If you don't have installed docker on your PC proceed:
