@@ -10,6 +10,7 @@ import com.messageservice.repository.RoomRepository;
 import com.messageservice.repository.UsernameRepository;
 import com.messageservice.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
@@ -35,18 +37,20 @@ public class RoomServiceImpl implements RoomService {
         String username = roomDto.getCreator().getUsername();
         Room room = roomMapper.mapToEntity(roomDto);
         User creator = usernameRepository.findByUsername(username).orElseThrow(
-                ()->new EntityNotFoundException("user with username: " + username + " doesn't exist")
+                () -> new EntityNotFoundException("user with username: " + username + " doesn't exist")
         );
         room.setCreator(creator);
         room.setMembers(new HashSet<>());
         room.getMembers().add(creator);
         Room persisted = roomRepository.save(room);
+        log.info("Room was created with id: {}", persisted.getId());
         return roomMapper.mapToDto(persisted);
     }
 
     @Override
-    public ResponseEntity<Void> delete(RoomDto roomDto) {
-        roomRepository.deleteById(roomDto.getId());
+    public ResponseEntity<Void> delete(Long roomId) {
+        roomRepository.deleteById(roomId);
+        log.info("Room was deleted with id: {}", roomId);
         return ResponseEntity.ok().build();
     }
 
@@ -55,23 +59,28 @@ public class RoomServiceImpl implements RoomService {
     public RoomDto rename(RoomDto roomDto) {
         Room room = roomRepository.getById(roomDto.getId());
         room.setName(roomDto.getName());
-        return roomMapper.mapToDto(roomRepository.save(room));
+        Room persisted = roomRepository.save(room);
+        log.info("Room with id: {} was renamed from {} to {}", persisted.getId(), roomDto.getName(), persisted.getName());
+        return roomMapper.mapToDto(persisted);
     }
 
     @Override
     public List<RoomDto> showAllRooms() {
-        return roomRepository.findAll().stream().map(roomMapper::mapToDto).collect(Collectors.toList());
+        List<RoomDto> roomsDto = roomRepository.findAll().stream().map(roomMapper::mapToDto).collect(Collectors.toList());
+        log.info("All rooms were requested");
+        return roomsDto;
     }
 
     @Override
     @Transactional
     public ResponseEntity<Void> addMember(Long roomId, String username) {
         User member = usernameRepository.findByUsername(username).orElseThrow(
-                ()->new EntityNotFoundException("user with username: " + username + " doesn't exist")
+                () -> new EntityNotFoundException("user with username: " + username + " doesn't exist")
         );
         Room room = roomRepository.getById(roomId);
         room.getMembers().add(member);
         roomRepository.save(room);
+        log.info("To members list of room with id: {} was added new member with username: {}", roomId, username);
         return ResponseEntity.ok().build();
     }
 
@@ -79,16 +88,19 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public ResponseEntity<Void> removeMember(Long roomId, String username) {
         User member = usernameRepository.findByUsername(username).orElseThrow(
-                ()->new EntityNotFoundException("user with username: " + username + " doesn't exist")
+                () -> new EntityNotFoundException("user with username: " + username + " doesn't exist")
         );
         Room room = roomRepository.getById(roomId);
         room.getMembers().remove(member);
         roomRepository.save(room);
+        log.info("From members list of room with id: {} was removed member with username: {}", roomId, username);
         return ResponseEntity.ok().build();
     }
 
     @Override
     public Set<UserDto> showMembers(Long roomId) {
-        return roomRepository.getById(roomId).getMembers().stream().map(usernameMapper::mapToDto).collect(Collectors.toSet());
+        Set<UserDto> members = roomRepository.getById(roomId).getMembers().stream().map(usernameMapper::mapToDto).collect(Collectors.toSet());
+        log.info("Member-list was requested for room with id: {}", roomId);
+        return members;
     }
 }

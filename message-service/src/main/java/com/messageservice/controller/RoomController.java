@@ -23,8 +23,8 @@ public class RoomController implements RoomApi {
     }
 
     @Override
-    public ResponseEntity<Void> delete(RoomDto roomDto) {
-        return roomService.delete(roomDto);
+    public ResponseEntity<Void> delete(Long roomId) {
+        return roomService.delete(roomId);
     }
 
     @Override

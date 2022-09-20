@@ -12,10 +12,11 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 
-@Configuration
 @Slf4j
+@Configuration
 public class RabbitConfiguration {
 
     @Value("${rabbit.host}")

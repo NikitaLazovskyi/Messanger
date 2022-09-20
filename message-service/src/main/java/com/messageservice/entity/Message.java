@@ -23,7 +23,7 @@ public class Message implements Serializable {
     @JoinColumn(name = "sender", nullable = false)
     private User sender;
     private String message;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room", nullable = false)
     private Room room;
     private Timestamp timestamp;

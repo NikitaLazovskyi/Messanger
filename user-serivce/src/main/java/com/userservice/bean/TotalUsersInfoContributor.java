@@ -15,6 +15,6 @@ public class TotalUsersInfoContributor implements InfoContributor {
     @Override
     public void contribute(Info.Builder builder) {
         Integer users = userRepository.findAll().size();
-        builder.withDetail("users", users);
+        builder.withDetail("users", users).build();
     }
 }

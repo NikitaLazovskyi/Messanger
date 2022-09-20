@@ -11,7 +11,7 @@ public interface RoomService {
 
     RoomDto create(RoomDto roomDto);
 
-    ResponseEntity<Void> delete(RoomDto roomDto);
+    ResponseEntity<Void> delete(Long roomId);
 
     RoomDto rename(RoomDto roomDto);
 

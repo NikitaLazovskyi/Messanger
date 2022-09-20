@@ -1,8 +1,12 @@
 package com.messageservice.mapper;
 
 import com.messageservice.dto.MessageDto;
+import com.messageservice.dto.RoomDto;
+import com.messageservice.dto.UserDto;
 import com.messageservice.entity.Message;
-import org.mapstruct.Mapper;
+import com.messageservice.entity.Room;
+import com.messageservice.entity.User;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

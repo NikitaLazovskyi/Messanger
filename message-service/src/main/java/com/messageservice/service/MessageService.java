@@ -1,6 +1,7 @@
 package com.messageservice.service;
 
 import com.messageservice.dto.MessageDto;
+import com.messageservice.dto.UserDto;
 import com.messageservice.service.enums.FormatMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
