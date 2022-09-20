@@ -103,4 +103,14 @@ public class RoomServiceImpl implements RoomService {
         log.info("Member-list was requested for room with id: {}", roomId);
         return members;
     }
+
+    @Override
+    public boolean isMember(Long memberId, Long roomId) {
+        return roomRepository.isMemberExist(memberId, roomId) > 0;
+    }
+
+    @Override
+    public boolean isExist(Long memberId) {
+        return roomRepository.existsById(memberId);
+    }
 }

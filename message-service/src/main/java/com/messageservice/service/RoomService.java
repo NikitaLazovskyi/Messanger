@@ -22,4 +22,8 @@ public interface RoomService {
     ResponseEntity<Void> removeMember(Long roomId, String username);
 
     Set<UserDto> showMembers(Long roomId);
+
+    boolean isMember(Long memberId, Long roomId);
+
+    boolean isExist(Long memberId);
 }

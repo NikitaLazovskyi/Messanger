@@ -2,10 +2,13 @@ package com.messageservice.service.impl;
 
 import com.messageservice.dto.MessageDto;
 import com.messageservice.entity.Message;
+import com.messageservice.entity.User;
+import com.messageservice.exception.InvalidOperationException;
 import com.messageservice.mapper.MessageMapper;
 import com.messageservice.repository.MessageRepository;
 import com.messageservice.repository.UsernameRepository;
 import com.messageservice.service.MessageService;
+import com.messageservice.service.RoomService;
 import com.messageservice.service.enums.FormatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,17 +29,25 @@ import java.util.stream.Collectors;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
+    private final RoomService roomService;
     private final UsernameRepository usernameRepository;
     private final MessageMapper messageMapper = MessageMapper.INSTANCE;
 
     @Override
     public ResponseEntity<Void> sendMessage(MessageDto messageDto) {
+        User sender = usernameRepository.findByUsername(messageDto.getSender().getUsername()).orElseThrow(
+                () -> new EntityNotFoundException("user with username: " + messageDto.getSender().getUsername() + " doesn't exist")
+        );
+        if (!roomService.isExist(messageDto.getRoom().getId())){
+            throw new InvalidOperationException("Room doesn't exist");
+        }
+        if (!roomService.isMember(sender.getId(), messageDto.getRoom().getId())) {
+            throw new InvalidOperationException("User should be in member list of this room");
+        }
         Message message = messageMapper.mapToEntity(messageDto);
         message.setUid(UUID.randomUUID());
         message.setTimestamp(Timestamp.from(Instant.now()));
-        message.setSender(usernameRepository.findByUsername(messageDto.getSender().getUsername()).orElseThrow(
-                () -> new EntityNotFoundException("user with username: " + message.getSender().getUsername() + " doesn't exist")
-        ));
+        message.setSender(sender);
 
         messageRepository.save(message);
         log.info("Message was sent with UID: {}", message.getUid());
