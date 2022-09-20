@@ -2,7 +2,7 @@ version: "3"
 services:
   rabbitmq:
     build:
-      context: ./
+      context: ./build
       dockerfile: DockerfileRabbitMQ
     container_name: rabbitmq
     ports:
@@ -10,14 +10,14 @@ services:
       - "5672:5672"
   users-mongodb:
     build:
-      context: ./
+      context: ./build
       dockerfile: DockerfileMongo
     container_name: users-mongodb
     ports:
       - "27017:27017"
   messages-postgres:
     build:
-      context: ./
+      context: ./build
       dockerfile: DockerfilePostgres
     container_name: messages-postgres
     ports:
