@@ -1,11 +1,11 @@
 # Quick start
 
--NOTE! For launching need to be installed Docker! If it doesn't, please, proceed and install it:
+-NOTE! The Docker need to be installed. If it isn't please proceed and install it:
 https://www.docker.com/get-started/
 
 ## 1. Launching:
-- Proceed to the `remote` folder of root folder by path `messenger/remote`
-- Open here CLI and enter next:
+- Proceed to the `remote` folder of the root folder by path `messenger/remote`
+- Open CLI here and enter next:
 `docker-compose up`
 - wait till images will be downloaded and deployed on local host
 
@@ -15,15 +15,15 @@ https://www.docker.com/get-started/
 
 ## 2. Build services
 - Proceed to the folder `messenger/user-service`
-- Open here CLI 
+- Open CLI here
 - Run next command:
 ```mvn clean package spring-boot:repackage```
 - Do the same actions inside `messanger/message-service` folder
 
 ## 3. Run 
-- Then you should proceed to `messenger` folder and open here your CLI. 
+- Then you should proceed to `messenger` folder and open your CLI here. 
 - Enter next: ```docker-compose up```
-- Wait until downloading and deploying were finished.
+- Wait download and deployment were finished.
 - Use :)
 
 # Stack
@@ -45,4 +45,5 @@ https://www.docker.com/get-started/
 ![Gif-demo](https://github.com/NikitaLazovskyi/Messenger/blob/master/gifs/register_user_gif.gif)
 <!-- 
 ## Gif-demo of docker-compose
-![Gif-demo](https://github.com/NikitaLazovskyi/Messenger/blob/master/gifs/docker_compose_gif.gif) -->
+![Gif-demo](https://github.com/NikitaLazovskyi/Messenger/blob/master/gifs/docker_compose_gif.gif) 
+-->
