@@ -43,6 +43,6 @@ https://www.docker.com/get-started/
 
 ## Gif-demo of event-driven architecture
 ![Gif-demo](https://github.com/NikitaLazovskyi/Messenger/blob/master/gifs/register_user_gif.gif)
-
+<!-- 
 ## Gif-demo of docker-compose
-![Gif-demo](https://github.com/NikitaLazovskyi/Messenger/blob/master/gifs/docker_compose_gif.gif)
+![Gif-demo](https://github.com/NikitaLazovskyi/Messenger/blob/master/gifs/docker_compose_gif.gif) -->
